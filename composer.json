@@ -9,7 +9,7 @@
         "psr-4": {}
     },
     "bin": [
-        "bin/gendiff.php"
+        "bin/gendiff"
     ],
     "description": "Project #2 for Hexlet",
     "license": "MIT",
