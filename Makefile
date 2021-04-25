@@ -1,9 +1,8 @@
 install:
-		composer install
-
+	composer install
 update:
-		composer update
-
+	composer update
 validate:
-		composer validate
-
+	composer validate
+lint:
+	composer run-script phpcs -- --standard=PSR12 src bin

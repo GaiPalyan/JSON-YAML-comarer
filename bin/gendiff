@@ -8,3 +8,23 @@ if (file_exists($autoloadPath1)) {
 } else {
     include_once $autoloadPath2;
 }
+
+use function Differ\Differ\genDiff;
+
+$doc = <<<'DOCOPT'
+Generate diff
+
+Usage:
+  gendiff (-h|--help)
+  gendiff (-v|--version) <port>
+  gendiff [--format <fmt>] <firstFile> <secondFile>
+
+Options:
+  -h --help                     Show this screen
+  -v --version                  Show version
+  --format <fmt>                Report format [default: stylish]
+DOCOPT;
+$args = Docopt::handle($doc, ['version' => 'gendiff 0.1']);
+$result = genDiff($args->args['<firstFile>'], $args->args['<secondFile>']);
+print_r($result);
+
