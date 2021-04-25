@@ -25,6 +25,7 @@ Options:
   --format <fmt>                Report format [default: stylish]
 DOCOPT;
 $args = Docopt::handle($doc, ['version' => 'gendiff 0.1']);
+
 $result = genDiff($args->args['<firstFile>'], $args->args['<secondFile>']);
 print_r($result);
 

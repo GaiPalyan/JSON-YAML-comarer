@@ -4,7 +4,7 @@ namespace Differ\Differ;
 
 use function Functional\sort;
 
-function genDiff($filepath1, $filepath2)
+function genDiff(string $filepath1, string $filepath2): string
 {
     $json1 = boolConverter(fileDecoder($filepath1));
     $json2 = boolConverter(fileDecoder($filepath2));

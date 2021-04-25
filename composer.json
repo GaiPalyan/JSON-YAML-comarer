@@ -22,7 +22,8 @@
         "lstrojny/functional-php": "^1.17"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "^3.6"
+        "squizlabs/php_codesniffer": "^3.6",
+        "phpunit/phpunit": "^9.5"
     },
     "scripts": {
         "phpcs": "phpcs --standard=PSR12 src bin"
