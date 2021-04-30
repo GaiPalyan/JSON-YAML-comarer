@@ -12,24 +12,25 @@ function genDiff(string $filepath1, string $filepath2): string
     $sorted = sort($keys, fn($right, $left) => $right <=> $left, true);
 
 
-    return array_reduce(
+    $aggregatedDiff = array_reduce(
         $sorted,
         function ($acc, $key) use ($json1, $json2) {
             if (array_key_exists($key, $json1) && array_key_exists($key, $json2)) {
                 if ($json1[$key] !== $json2[$key]) {
-                    $acc .= " - {$key}: {$json1[$key]}\n";
-                    $acc .= " + {$key}: {$json2[$key]}\n";
+                    $acc .= "  - {$key}: {$json1[$key]}\n";
+                    $acc .= "  + {$key}: {$json2[$key]}\n";
                 } else {
-                    $acc .= "   {$key}: {$json1[$key]}\n";
+                    $acc .= "    {$key}: {$json1[$key]}\n";
                 }
             } elseif (array_key_exists($key, $json1) && !array_key_exists($key, $json2)) {
-                $acc .= " - {$key}: {$json1[$key]}\n";
+                $acc .= "  - {$key}: {$json1[$key]}\n";
             } else {
-                $acc .= " + {$key}: {$json2[$key]}\n";
+                $acc .= "  + {$key}: {$json2[$key]}\n";
             }
             return $acc;
         }
     );
+    return "{\n$aggregatedDiff}";
 }
 
 function fileDecoder(string $path): array
@@ -41,7 +42,6 @@ function fileDecoder(string $path): array
         return json_decode($file, true);
     }
 }
-
 
 function boolToString(bool $value): string
 {

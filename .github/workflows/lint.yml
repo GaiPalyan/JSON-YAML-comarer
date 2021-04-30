@@ -28,6 +28,11 @@ jobs:
       - name: Run linter
         # Run Linter
         run: make lint
+      - name: make tests
+        uses: paambaati/codeclimate-action@v2.6.0
         env:
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageCOmmand: make test-coverage
+          coverageLocations: ${{github.workplace}}/build/logs/clover.xml:clover
+          debug: true

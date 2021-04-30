@@ -6,6 +6,9 @@
         }
     ],
     "autoload": {
+        "psr-4": {
+            "Test\\": "tests"
+        },
         "files": ["src/Differ.php"]
     },
     "bin": [
