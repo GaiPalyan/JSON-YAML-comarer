@@ -8,10 +8,12 @@ use function Differ\Differ\genDiff;
 
 class DiffTest extends TestCase
 {
-    private $filePathJSON1 = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures/JSON1.json';
-    private $filePathJSON2 = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures/JSON2.json';
-    private $diffMapPath = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures/DiffMap';
-    private $diffMap;
+    private string $filePathJSON1 = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures/JSON1.json';
+    private string $filePathJSON2 = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures/JSON2.json';
+    private string $filePathYaml1 = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures/YAML1.yaml';
+    private string $filePathYaml2 = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures/YAML2.yaml';
+    private string $diffMapPath = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures/DiffMap';
+    private string $diffMap;
 
     public function setUp(): void
     {
@@ -20,8 +22,10 @@ class DiffTest extends TestCase
 
     public function testDiff()
     {
-        $actual = genDiff($this->filePathJSON1, $this->filePathJSON2);
+        $actualJsonDiff = genDiff($this->filePathJSON1, $this->filePathJSON2);
+        $actualYamlDiff = genDiff($this->filePathYaml1, $this->filePathYaml2);
 
-        $this->assertEquals($this->diffMap, $actual);
+        $this->assertEquals($this->diffMap, $actualJsonDiff);
+        $this->assertEquals($this->diffMap, $actualYamlDiff);
     }
 }

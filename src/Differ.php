@@ -2,45 +2,38 @@
 
 namespace Differ\Differ;
 
+use function Differ\Parsers\parser;
 use function Functional\sort;
+
+use Symfony\Component\Yaml\Yaml;
 
 function genDiff(string $filepath1, string $filepath2): string
 {
-    $json1 = boolConverter(fileDecoder($filepath1));
-    $json2 = boolConverter(fileDecoder($filepath2));
-    $keys = array_keys(array_merge($json1, $json2));
+    $file1 = boolConverter(parser($filepath1));
+    $file2 = boolConverter(parser($filepath2));
+    $keys = array_keys(array_merge($file1, $file2));
     $sorted = sort($keys, fn($right, $left) => $right <=> $left, true);
 
 
     $aggregatedDiff = array_reduce(
         $sorted,
-        function ($acc, $key) use ($json1, $json2) {
-            if (array_key_exists($key, $json1) && array_key_exists($key, $json2)) {
-                if ($json1[$key] !== $json2[$key]) {
-                    $acc .= "  - {$key}: {$json1[$key]}\n";
-                    $acc .= "  + {$key}: {$json2[$key]}\n";
+        function ($acc, $key) use ($file1, $file2) {
+            if (array_key_exists($key, $file1) && array_key_exists($key, $file2)) {
+                if ($file1[$key] !== $file2[$key]) {
+                    $acc .= "  - {$key}: {$file1[$key]}\n";
+                    $acc .= "  + {$key}: {$file2[$key]}\n";
                 } else {
-                    $acc .= "    {$key}: {$json1[$key]}\n";
+                    $acc .= "    {$key}: {$file1[$key]}\n";
                 }
-            } elseif (array_key_exists($key, $json1) && !array_key_exists($key, $json2)) {
-                $acc .= "  - {$key}: {$json1[$key]}\n";
+            } elseif (array_key_exists($key, $file1) && !array_key_exists($key, $file2)) {
+                $acc .= "  - {$key}: {$file1[$key]}\n";
             } else {
-                $acc .= "  + {$key}: {$json2[$key]}\n";
+                $acc .= "  + {$key}: {$file2[$key]}\n";
             }
             return $acc;
         }
     );
     return "{\n$aggregatedDiff}";
-}
-
-function fileDecoder(string $path): array
-{
-    if (!file_exists($path)) {
-        throw new \Error("{$path} file not exist");
-    } else {
-        $file = file_get_contents($path);
-        return json_decode($file, true);
-    }
 }
 
 function boolToString(bool $value): string
