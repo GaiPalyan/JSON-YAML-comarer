@@ -5,8 +5,6 @@ namespace Differ\Differ;
 use function Differ\Parsers\parser;
 use function Functional\sort;
 
-use Symfony\Component\Yaml\Yaml;
-
 function genDiff(string $filepath1, string $filepath2): string
 {
     $file1 = boolConverter(parser($filepath1));
