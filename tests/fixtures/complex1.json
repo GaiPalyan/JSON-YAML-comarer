@@ -11,7 +11,7 @@
     }
   },
   "group1": {
-    "baz": 10,
+    "baz": "bas",
     "foo": "bar",
     "nest": {
       "key": "value"
