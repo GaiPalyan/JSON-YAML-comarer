@@ -20,12 +20,12 @@ Usage:
   gendiff [--format <fmt>] <firstFile> <secondFile>
 
 Options:
-  -h --help                     Show this screen
-  -v --version                  Show version
-  --format <fmt>                Report format [default: stylish]
+  -h,  --help                     Show this screen
+  -v,  --version                  Show version
+  --format <fmt>             Report format [default: stylish]
 DOCOPT;
 $args = Docopt::handle($doc, ['version' => 'gendiff 0.1']);
 
-$result = genDiff($args->args['<firstFile>'], $args->args['<secondFile>']);
+$result = genDiff($args->args['<firstFile>'], $args->args['<secondFile>'], $args->args['--format']);
 print_r($result);
 

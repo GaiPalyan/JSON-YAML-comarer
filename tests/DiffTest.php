@@ -8,24 +8,82 @@ use function Differ\Differ\genDiff;
 
 class DiffTest extends TestCase
 {
-    private string $filePathJSON1 = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures/JSON1.json';
-    private string $filePathJSON2 = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures/JSON2.json';
-    private string $filePathYaml1 = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures/YAML1.yaml';
-    private string $filePathYaml2 = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures/YAML2.yaml';
-    private string $diffMapPath = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures/DiffMap';
-    private string $diffMap;
-
-    public function setUp(): void
+    /**
+     * @param string $file
+     * @return string
+     */
+    public function getPath(string $file): string
     {
-        $this->diffMap = file_get_contents($this->diffMapPath);
+        return __DIR__ . '/fixtures/' . $file;
     }
 
-    public function testDiff()
+    /**
+     * @param string $fileName
+     * @return string
+     */
+    public function getData(string $fileName): string
     {
-        $actualJsonDiff = genDiff($this->filePathJSON1, $this->filePathJSON2);
-        $actualYamlDiff = genDiff($this->filePathYaml1, $this->filePathYaml2);
+        return file_get_contents($this->getPath($fileName));
+    }
 
-        $this->assertEquals($this->diffMap, $actualJsonDiff);
-        $this->assertEquals($this->diffMap, $actualYamlDiff);
+    /**
+     * @return array
+     */
+    public function additionProvider(): array
+    {
+        return [
+             'complex json --stylish' => [
+                 'stylish.txt',
+                 'complex1.json',
+                 'complex2.json',
+                 'stylish'
+             ],
+             'complex yml --stylish' => [
+                'stylish.txt',
+                'complex1.yaml',
+                'complex2.yaml',
+                'stylish'
+             ],
+             'complex json --plain' => [
+                'plain.txt',
+                'complex1.json',
+                'complex2.json',
+                'plain'
+             ],
+             'complex yml --plain' => [
+                'plain.txt',
+                'complex1.yaml',
+                'complex2.yaml',
+                'plain'
+             ],
+             'complex json --json' => [
+                'json.txt',
+                'complex1.json',
+                'complex2.json',
+                'json'
+             ],
+             'complex yml --json' => [
+                'json.txt',
+                'complex1.yaml',
+                'complex2.yaml',
+                'json'
+             ]
+        ];
+    }
+
+    /**
+     * @param string $expected
+     * @param string $firstFile
+     * @param string $secondFile
+     * @param string $format
+     * @throws \Exception
+     * @dataProvider additionProvider
+     */
+    public function testDiff(string $expected, string $firstFile, string $secondFile, string $format = 'stylish')
+    {
+        $firstFile = $this->getPath($firstFile);
+        $secondFile = $this->getPath($secondFile);
+        $expected = $this->getData($expected);
+        $this->assertEquals($expected, genDiff($firstFile, $secondFile, $format));
     }
 }

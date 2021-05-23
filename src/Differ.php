@@ -2,44 +2,104 @@
 
 namespace Differ\Differ;
 
+use function Differ\Differ\Formatters\getFormat;
 use function Differ\Parsers\parser;
 use function Functional\sort;
 
-function genDiff(string $filepath1, string $filepath2): string
+/**
+ * @param string $filePath1
+ * @param string $filePath2
+ * @param string $format
+ * @return string
+ * @throws \Exception
+ */
+
+function genDiff(string $filePath1, string $filePath2, string $format = 'stylish'): string
 {
-    $file1 = boolConverter(parser($filepath1));
-    $file2 = boolConverter(parser($filepath2));
-    $keys = array_keys(array_merge($file1, $file2));
-    $sorted = sort($keys, fn($right, $left) => $right <=> $left, true);
+    $file1 = getData($filePath1);
+    $file2 = getData($filePath2);
+    return getFormat($file1, $file2, $format);
+}
 
+/**
+ * @param object $file1
+ * @param object $file2
+ * @return array
+ */
 
-    $aggregatedDiff = array_reduce(
-        $sorted,
-        function ($acc, $key) use ($file1, $file2) {
-            if (array_key_exists($key, $file1) && array_key_exists($key, $file2)) {
-                if ($file1[$key] !== $file2[$key]) {
-                    $acc .= "  - {$key}: {$file1[$key]}\n";
-                    $acc .= "  + {$key}: {$file2[$key]}\n";
-                } else {
-                    $acc .= "    {$key}: {$file1[$key]}\n";
-                }
-            } elseif (array_key_exists($key, $file1) && !array_key_exists($key, $file2)) {
-                $acc .= "  - {$key}: {$file1[$key]}\n";
-            } else {
-                $acc .= "  + {$key}: {$file2[$key]}\n";
+function treeBuilder(object $file1, object $file2): array
+{
+    $keys = array_keys(array_merge((array)$file1, (array)$file2));
+    $sorted = sort($keys, fn($left, $right) => $left <=> $right);
+
+    return array_map(
+        function ($key) use ($file1, $file2) {
+            if (!property_exists($file1, $key)) {
+                return [
+                    'key' => $key,
+                    'type' => 'added',
+                    'value' => $file2->$key
+                ];
             }
-            return $acc;
-        }
+            if (!property_exists($file2, $key)) {
+                return [
+                  'key' => $key,
+                  'type' => 'delete',
+                  'value' => $file1->$key
+                ];
+            }
+            if (is_object($file1->$key) && is_object($file2->$key)) {
+                return [
+                  'key' => $key,
+                  'type' => 'parent',
+                  'children' => treeBuilder($file1->$key, $file2->$key)
+                ];
+            }
+            if ($file1->$key === $file2->$key) {
+                return [
+                  'key' => $key,
+                  'type' => 'unchanged',
+                  'value' => $file1->$key
+                ];
+            }
+            return [
+              'key' => $key,
+              'type' => 'modified',
+              'before' => $file1->$key,
+              'after' => $file2->$key
+            ];
+        },
+        $sorted
     );
-    return "{\n$aggregatedDiff}";
 }
 
-function boolToString(bool $value): string
+/**
+ * @param string $path
+ * @return string
+ */
+
+function fileReader(string $path): string
 {
-    return $value ? 'true' : 'false';
+    if (is_readable($path)) {
+        $data = file_get_contents($path);
+    } else {
+        throw new \Error('unreadable statement');
+    }
+    return $data;
 }
 
-function boolConverter(array $array): array
+/**
+ * @param string $path
+ * @return object
+ */
+
+function getData(string $path): object
 {
-    return array_map(fn($value) => is_bool($value) ? boolToString($value) : $value, $array);
+    if (file_exists($path)) {
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
+        $content = fileReader($path);
+        return parser($extension, $content);
+    } else {
+        throw new \Error('file not exist');
+    }
 }
