@@ -18,6 +18,9 @@ function toString($value): string
     if (is_null($value)) {
         return 'null';
     }
+    if (is_numeric($value)) {
+        return $value;
+    }
     return "'$value'";
 }
 
