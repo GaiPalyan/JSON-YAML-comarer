@@ -22,7 +22,7 @@ Usage:
 Options:
   -h,  --help                     Show this screen
   -v,  --version                  Show version
-  --format <fmt>             Report format [default: stylish]
+  --format <fmt>                  Report format [default: stylish]
 DOCOPT;
 $args = Docopt::handle($doc, ['version' => 'gendiff 0.1']);
 
