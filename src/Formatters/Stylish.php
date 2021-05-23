@@ -13,10 +13,10 @@ const INDENTS_SIZE = [
  * @param int $depth
  * @return string
  */
-function makeStylish(array $tree, int $depth = 1)
+function makeStylish(array $tree, int $depth = 1): string
 {
-    $result = array_map(
-        function ($node) use ($depth) {
+    $result = implode("\n", array_map(
+        function ($node) use ($depth): string {
             $type = $node['type'] ?? null;
             switch ($type) {
                 case 'parent':
@@ -37,14 +37,13 @@ function makeStylish(array $tree, int $depth = 1)
                     $oldValue = stringifyInObjects($node['before'], $depth);
                     $newValue = stringifyInObjects($node['after'], $depth);
                     return "{$newLine}- {$node['key']}: {$oldValue}\n"
-                            . "{$newLine}+ {$node['key']}: {$newValue}";
+                        . "{$newLine}+ {$node['key']}: {$newValue}";
                 default:
                     throw new \Error("undefined type {$type}");
             }
         },
         $tree
-    );
-    $result = implode("\n", $result);
+    ));
     return "{\n{$result}\n" . getIndent($depth - 1, INDENTS_SIZE['BIG']) . "}";
 }
 
@@ -54,7 +53,7 @@ function stringifyInObjects($value, int $depth = 1): string
         return toString($value);
     }
     $result = array_map(
-        function ($key) use ($value, $depth) {
+        function ($key) use ($value, $depth): string {
             $stringifier = stringifyInObjects($value->$key, $depth + 1);
             return getIndent($depth + 1, INDENTS_SIZE['BIG']) . "{$key}: {$stringifier}";
         },
