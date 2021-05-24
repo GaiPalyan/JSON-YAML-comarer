@@ -6,22 +6,15 @@ namespace Differ\Differ\Plain;
  * @param mixed $value
  * @return string
  */
-
 function toString($value): string
 {
-    if (is_object($value)) {
-        return "[complex value]";
-    }
-    if (is_bool($value)) {
-        return trim(var_export($value, true), "'");
+    if (is_string($value)) {
+        return "'{$value}'";
     }
     if (is_null($value)) {
         return 'null';
     }
-    if (is_numeric($value)) {
-        return $value;
-    }
-    return "'$value'";
+    return is_object($value) ? '[complex value]' : trim(var_export($value, true), "'");
 }
 
 /**
@@ -29,7 +22,6 @@ function toString($value): string
  * @param string $lane
  * @return string
  */
-
 function makePlain(array $tree, string $lane = ''): string
 {
     $relevantNodes = array_filter($tree, fn($node) => $node['type'] !== 'unchanged');
