@@ -2,6 +2,8 @@
 
 namespace Differ\Differ;
 
+use Exception;
+
 use function Differ\Differ\Formatters\getFormat;
 use function Differ\Parsers\parser;
 use function Functional\sort;
@@ -11,7 +13,7 @@ use function Functional\sort;
  * @param string $filePath2
  * @param string $format
  * @return string
- * @throws \Exception
+ * @throws Exception
  */
 
 function genDiff(string $filePath1, string $filePath2, string $format = 'stylish'): string
@@ -76,21 +78,22 @@ function treeBuilder(object $file1, object $file2): array
 /**
  * @param string $path
  * @return string
+ * @throws Exception
  */
 
 function fileReader(string $path): string
 {
-    if (is_readable($path)) {
-        $data = file_get_contents($path);
+    if (is_readable($path) && is_string($path)) {
+        return file_get_contents($path);
     } else {
-        throw new \Error('unreadable statement');
+        throw new Exception('unreadable statement');
     }
-    return $data;
 }
 
 /**
  * @param string $path
  * @return object
+ * @throws Exception
  */
 
 function getData(string $path): object
@@ -100,6 +103,6 @@ function getData(string $path): object
         $content = fileReader($path);
         return parser($extension, $content);
     } else {
-        throw new \Error('file not exist');
+        throw new Exception('file not exist');
     }
 }
