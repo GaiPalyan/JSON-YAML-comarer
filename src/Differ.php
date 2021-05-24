@@ -83,10 +83,15 @@ function treeBuilder(object $file1, object $file2): array
 
 function fileReader(string $path): string
 {
-    if (is_readable($path) && is_string($path)) {
-        return file_get_contents($path);
+    if (is_readable($path)) {
+        $content =  file_get_contents($path);
     } else {
-        throw new Exception('unreadable statement');
+        throw new Exception('unreadable file content');
+    }
+    if (is_string($content)) {
+        return $content;
+    } else {
+        throw new Exception('content not in string format');
     }
 }
 

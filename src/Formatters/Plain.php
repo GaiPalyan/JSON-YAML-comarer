@@ -7,7 +7,7 @@ namespace Differ\Differ\Plain;
  * @return string
  */
 
-function toString(mixed $value): string
+function toString($value): string
 {
     if (is_object($value)) {
         return "[complex value]";
