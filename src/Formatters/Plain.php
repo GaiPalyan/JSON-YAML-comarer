@@ -3,11 +3,11 @@
 namespace Differ\Differ\Plain;
 
 /**
- * @param mixed
+ * @param mixed $value
  * @return string
  */
 
-function toString($value): string
+function toString(mixed $value): string
 {
     if (is_object($value)) {
         return "[complex value]";

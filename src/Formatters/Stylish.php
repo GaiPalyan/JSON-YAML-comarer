@@ -47,6 +47,12 @@ function makeStylish(array $tree, int $depth = 1): string
     return "{\n{$result}\n" . getIndent($depth - 1, INDENTS_SIZE['BIG']) . "}";
 }
 
+/**
+ * @param mixed $value
+ * @param int $depth
+ * @return string
+ */
+
 function stringifyInObjects($value, int $depth = 1): string
 {
     if (!is_object($value)) {
@@ -79,6 +85,11 @@ function getIndent(int $depth, string $identType = 'standardIdent'): string
             throw new \Error("wrong ident type $identType");
     }
 }
+
+/**
+ * @param mixed $value
+ * @return string
+ */
 
 function toString($value): string
 {
