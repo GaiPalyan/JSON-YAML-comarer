@@ -40,35 +40,35 @@ function treeBuilder(object $file1, object $file2): array
                 return [
                     'key' => $key,
                     'type' => 'added',
-                    'value' => $file2->$key
+                    'value' => $file2->{$key}
                 ];
             }
             if (!property_exists($file2, $key)) {
                 return [
                   'key' => $key,
                   'type' => 'delete',
-                  'value' => $file1->$key
+                  'value' => $file1->{$key}
                 ];
             }
-            if (is_object($file1->$key) && is_object($file2->$key)) {
+            if (is_object($file1->{$key}) && is_object($file2->{$key})) {
                 return [
                   'key' => $key,
                   'type' => 'parent',
-                  'children' => treeBuilder($file1->$key, $file2->$key)
+                  'children' => treeBuilder($file1->{$key}, $file2->{$key})
                 ];
             }
-            if ($file1->$key === $file2->$key) {
+            if ($file1->{$key} === $file2->{$key}) {
                 return [
                   'key' => $key,
                   'type' => 'unchanged',
-                  'value' => $file1->$key
+                  'value' => $file1->{$key}
                 ];
             }
             return [
               'key' => $key,
               'type' => 'modified',
-              'before' => $file1->$key,
-              'after' => $file2->$key
+              'before' => $file1->{$key},
+              'after' => $file2->{$key}
             ];
         },
         $sorted

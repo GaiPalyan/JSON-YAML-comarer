@@ -2,6 +2,7 @@
 
 namespace Test;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 
 use function Differ\Differ\genDiff;
@@ -14,16 +15,8 @@ class DiffTest extends TestCase
      */
     public function getPath(string $file): string
     {
-        return __DIR__ . '/fixtures/' . $file;
-    }
-
-    /**
-     * @param string $fileName
-     * @return string
-     */
-    public function getData(string $fileName): string
-    {
-        return file_get_contents($this->getPath($fileName));
+        $path =  __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . $file;
+        return realpath($path);
     }
 
     /**
@@ -76,14 +69,18 @@ class DiffTest extends TestCase
      * @param string $firstFile
      * @param string $secondFile
      * @param string $format
-     * @throws \Exception
      * @dataProvider additionProvider
+     * @throws Exception
      */
-    public function testDiff(string $expected, string $firstFile, string $secondFile, string $format = 'stylish')
-    {
+    public function testDiff(
+        string $expected,
+        string $firstFile,
+        string $secondFile,
+        string $format = 'stylish'
+    ) {
         $firstFile = $this->getPath($firstFile);
         $secondFile = $this->getPath($secondFile);
-        $expected = $this->getData($expected);
+        $expected = file_get_contents($this->getPath($expected));
         $this->assertEquals($expected, genDiff($firstFile, $secondFile, $format));
     }
 }
