@@ -3,7 +3,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/cecfb59aa8880b0d8506/maintainability)](https://codeclimate.com/github/GaiPalyan/php-project-lvl2/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/cecfb59aa8880b0d8506/test_coverage)](https://codeclimate.com/github/GaiPalyan/php-project-lvl2/test_coverage)
 
-### This application compares two json or yuml files and shows the differences between them.
+### This application compares two json or yml files and shows the differences between them.
 
 ###### FAQ:
 
