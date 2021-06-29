@@ -8,6 +8,8 @@ use function Differ\Differ\Formatters\getFormat;
 use function Differ\Parsers\parser;
 use function Functional\sort;
 
+use const Differ\Differ\Constants\TYPES;
+
 /**
  * @param string $filePath1
  * @param string $filePath2
@@ -39,34 +41,34 @@ function treeBuilder(object $file1, object $file2): array
             if (!property_exists($file1, $key)) {
                 return [
                     'key' => $key,
-                    'type' => 'added',
+                    'type' => TYPES['ADDED'],
                     'value' => $file2->{$key}
                 ];
             }
             if (!property_exists($file2, $key)) {
                 return [
                   'key' => $key,
-                  'type' => 'delete',
+                  'type' => TYPES['DELETED'],
                   'value' => $file1->{$key}
                 ];
             }
             if (is_object($file1->{$key}) && is_object($file2->{$key})) {
                 return [
                   'key' => $key,
-                  'type' => 'parent',
+                  'type' => TYPES['PARENT'],
                   'children' => treeBuilder($file1->{$key}, $file2->{$key})
                 ];
             }
             if ($file1->{$key} === $file2->{$key}) {
                 return [
                   'key' => $key,
-                  'type' => 'unchanged',
+                  'type' => TYPES['UNMODIFIED'],
                   'value' => $file1->{$key}
                 ];
             }
             return [
               'key' => $key,
-              'type' => 'modified',
+              'type' => TYPES['MODIFIED'],
               'before' => $file1->{$key},
               'after' => $file2->{$key}
             ];

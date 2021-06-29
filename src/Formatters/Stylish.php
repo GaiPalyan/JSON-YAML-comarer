@@ -2,11 +2,9 @@
 
 namespace Differ\Differ\Stylish;
 
-const INDENT = ' ';
-const INDENTS_SIZE = [
-    'STANDARD' => 'standardIdent',
-    'BIG' => 'bigIdent'
-];
+use const Differ\Differ\Constants\INDENT;
+use const Differ\Differ\Constants\INDENTS_SIZE;
+use const Differ\Differ\Constants\TYPES;
 
 /**
  * @param array $tree
@@ -15,24 +13,24 @@ const INDENTS_SIZE = [
  */
 function makeStylish(array $tree, int $depth = 1): string
 {
-    $result = implode("\n", array_map(
+    $result = implode(PHP_EOL, array_map(
         function ($node) use ($depth): string {
             $type = $node['type'] ?? null;
             switch ($type) {
-                case 'parent':
+                case TYPES['PARENT']:
                     $children = makeStylish($node['children'], $depth + 1);
                     return  getIndent($depth, INDENTS_SIZE['BIG']) .
                         "{$node['key']}: " . "" . "{$children}";
-                case 'added':
+                case TYPES['ADDED']:
                     $stringVal = stringifyInObjects($node['value'], $depth);
                     return getIndent($depth) . "+ {$node['key']}: {$stringVal}";
-                case 'delete':
+                case TYPES['DELETED']:
                     $stringVal = stringifyInObjects($node['value'], $depth);
                     return getIndent($depth) . "- {$node['key']}: {$stringVal}";
-                case 'unchanged':
+                case TYPES['UNMODIFIED']:
                     $stringVal = stringifyInObjects($node['value'], $depth);
                     return getIndent($depth) . "  {$node['key']}: {$stringVal}";
-                case 'modified':
+                case TYPES['MODIFIED']:
                     $newLine = getIndent($depth);
                     $oldValue = stringifyInObjects($node['before'], $depth);
                     $newValue = stringifyInObjects($node['after'], $depth);
@@ -65,7 +63,7 @@ function stringifyInObjects($value, int $depth = 1): string
         },
         array_keys((array) $value)
     );
-    return "{\n" . implode("\n", $result) . "\n" . getIndent($depth, INDENTS_SIZE['BIG']) . "}";
+    return "{\n" . implode(PHP_EOL, $result) . "\n" . getIndent($depth, INDENTS_SIZE['BIG']) . "}";
 }
 
 /**
