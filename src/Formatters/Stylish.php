@@ -15,7 +15,7 @@ const INDENTS_SIZE = [
  */
 function makeStylish(array $tree, int $depth = 1): string
 {
-    $result = implode("\n", array_map(
+    $result = implode(PHP_EOL, array_map(
         function ($node) use ($depth): string {
             $type = $node['type'] ?? null;
             switch ($type) {
@@ -52,7 +52,6 @@ function makeStylish(array $tree, int $depth = 1): string
  * @param int $depth
  * @return string
  */
-
 function stringifyInObjects($value, int $depth = 1): string
 {
     if (!is_object($value)) {
@@ -65,7 +64,7 @@ function stringifyInObjects($value, int $depth = 1): string
         },
         array_keys((array) $value)
     );
-    return "{\n" . implode("\n", $result) . "\n" . getIndent($depth, INDENTS_SIZE['BIG']) . "}";
+    return "{\n" . implode(PHP_EOL, $result) . "\n" . getIndent($depth, INDENTS_SIZE['BIG']) . "}";
 }
 
 /**
@@ -90,7 +89,6 @@ function getIndent(int $depth, string $identType = 'standardIdent'): string
  * @param mixed $value
  * @return string
  */
-
 function toString($value): string
 {
     if (is_bool($value)) {
