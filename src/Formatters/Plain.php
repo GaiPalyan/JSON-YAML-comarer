@@ -2,6 +2,8 @@
 
 namespace Differ\Differ\Plain;
 
+use const Differ\Differ\Constants\TYPES;
+
 /**
  * @param mixed $value
  * @return string
@@ -24,25 +26,25 @@ function toString($value): string
  */
 function makePlain(array $tree, string $lane = ''): string
 {
-    $relevantNodes = array_filter($tree, fn($node) => $node['type'] !== 'unchanged');
+    $relevantNodes = array_filter($tree, fn($node) => $node['type'] !== TYPES['UNMODIFIED']);
     $result = array_map(
         function ($node) use ($lane): string {
             $type = $node['type'] ?? null;
             switch ($type) {
-                case 'parent':
+                case TYPES['PARENT']:
                     $parent = $node['key'];
                     $fullPropertyName = $lane . $parent . ".";
                     return makePlain($node['children'], $fullPropertyName);
-                case 'added':
+                case TYPES['ADDED']:
                     $fullPropertyName = $lane . $node['key'];
                     $strValue = toString($node['value']);
                     return "Property '$fullPropertyName' was added with value: $strValue";
-                case 'modified':
+                case TYPES['MODIFIED']:
                     $fullPropertyName = $lane . $node['key'];
                     $strOldValue = toString($node['before']);
                     $strNewValue = toString($node['after']);
                     return "Property '$fullPropertyName' was updated. From $strOldValue to $strNewValue";
-                case 'delete':
+                case TYPES['DELETED']:
                     $fullPropertyName = $lane . $node['key'];
                     return "Property '$fullPropertyName' was removed";
                 default:
@@ -51,5 +53,5 @@ function makePlain(array $tree, string $lane = ''): string
         },
         $relevantNodes
     );
-    return implode("\n", $result);
+    return implode(PHP_EOL, $result);
 }
