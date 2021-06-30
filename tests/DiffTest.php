@@ -26,37 +26,37 @@ class DiffTest extends TestCase
     {
         return [
              'complex json --stylish' => [
-                 'stylish.txt',
+                 'stylish',
                  'complex1.json',
                  'complex2.json',
                  'stylish'
              ],
              'complex yml --stylish' => [
-                'stylish.txt',
+                'stylish',
                 'complex1.yaml',
                 'complex2.yaml',
                 'stylish'
              ],
              'complex json --plain' => [
-                'plain.txt',
+                'plain',
                 'complex1.json',
                 'complex2.json',
                 'plain'
              ],
              'complex yml --plain' => [
-                'plain.txt',
+                'plain',
                 'complex1.yaml',
                 'complex2.yaml',
                 'plain'
              ],
              'complex json --json' => [
-                'json.txt',
+                'json',
                 'complex1.json',
                 'complex2.json',
                 'json'
              ],
              'complex yml --json' => [
-                'json.txt',
+                'json',
                 'complex1.yaml',
                 'complex2.yaml',
                 'json'
