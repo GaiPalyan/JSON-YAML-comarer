@@ -11,7 +11,7 @@ const TYPES = [
     'PARENT' => 'parent',
     'CHILDREN' => 'children',
     'ADDED' => 'added',
-    'DELETED' => 'deleted',
+    'DELETED' => 'delete',
     'MODIFIED' => 'modified',
-    'UNMODIFIED' => 'unmodified'
+    'UNMODIFIED' => 'unchanged'
 ];
