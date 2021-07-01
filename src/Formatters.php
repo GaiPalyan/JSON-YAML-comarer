@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Differ\Differ\Formatters;
 
 use function Differ\Differ\Plain\makePlain;

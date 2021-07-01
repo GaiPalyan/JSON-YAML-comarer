@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Differ\Differ\Plain;
 
 use const Differ\Differ\Constants\TYPES;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Differ\Differ\Stylish;
 
 use const Differ\Differ\Constants\INDENT;
@@ -95,5 +97,5 @@ function toString($value): string
     if (is_null($value)) {
         return "null";
     }
-    return $value;
+    return "{$value}";
 }
